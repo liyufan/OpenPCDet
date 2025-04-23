@@ -2,15 +2,15 @@
 
 ### Requirements
 All the codes are tested in the following environment:
-* Linux (tested on Ubuntu 14.04/16.04/18.04/20.04/21.04)
+* Linux (tested on Ubuntu 14.04/16.04/18.04/20.04/21.04/24.04)
 * Python 3.6+
-* PyTorch 1.1 or higher (tested on PyTorch 1.1, 1,3, 1,5~1.10)
+* PyTorch 1.1 or higher (tested on PyTorch 1.1, 1,3, 1,5~1.10, 2.8)
 * CUDA 9.0 or higher (PyTorch 1.3+ needs CUDA 9.2+)
 * [`spconv v1.0 (commit 8da6f96)`](https://github.com/traveller59/spconv/tree/8da6f967fb9a054d8870c3515b1b44eca2103634) or [`spconv v1.2`](https://github.com/traveller59/spconv) or [`spconv v2.x`](https://github.com/traveller59/spconv)
 
 
 ### Install `pcdet v0.5`
-NOTE: Please re-install `pcdet v0.5` by running `python setup.py develop` even if you have already installed previous version.
+NOTE: Please re-install `pcdet v0.5` by running `pip install -e .` even if you have already installed previous version.
 
 a. Clone this repository.
 ```shell
@@ -34,5 +34,14 @@ b. Install the dependent libraries as follows:
   
 c. Install this `pcdet` library and its dependent libraries by running the following command:
 ```shell
-python setup.py develop
+pip install -e .
+```
+* To build the wheel only, run the following command:
+```shell
+pip install build
+python -m build --wheel
+```
+* To install the built wheel, run the following command:
+```shell
+pip install dist/*.whl
 ```

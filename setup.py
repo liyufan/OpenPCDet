@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from setuptools import find_packages, setup
+from setuptools import setup
 from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 
@@ -32,26 +32,7 @@ if __name__ == '__main__':
     write_version_to_file(version, 'pcdet/version.py')
 
     setup(
-        name='pcdet',
         version=version,
-        description='OpenPCDet is a general codebase for 3D object detection from point cloud',
-        install_requires=[
-            'numpy',
-            'llvmlite',
-            'numba',
-            'tensorboardX',
-            'easydict',
-            'pyyaml',
-            'scikit-image',
-            'tqdm',
-            'SharedArray',
-            # 'spconv',  # spconv has different names depending on the cuda version
-        ],
-
-        author='Shaoshuai Shi',
-        author_email='shaoshuaics@gmail.com',
-        license='Apache License 2.0',
-        packages=find_packages(exclude=['tools', 'data', 'output']),
         cmdclass={
             'build_ext': BuildExtension,
         },
