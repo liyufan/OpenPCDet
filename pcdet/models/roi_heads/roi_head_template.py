@@ -202,10 +202,18 @@ class RoIHeadTemplate(nn.Module):
         rcnn_cls = forward_ret_dict['rcnn_cls']
         rcnn_cls_labels = forward_ret_dict['rcnn_cls_labels'].view(-1)
         if loss_cfgs.CLS_LOSS == 'BinaryCrossEntropy':
-            rcnn_cls_flat = rcnn_cls.view(-1)
-            batch_loss_cls = F.binary_cross_entropy(torch.sigmoid(rcnn_cls_flat), rcnn_cls_labels.float(), reduction='none')
-            cls_valid_mask = (rcnn_cls_labels >= 0).float()
-            rcnn_loss_cls = (batch_loss_cls * cls_valid_mask).sum() / torch.clamp(cls_valid_mask.sum(), min=1.0)
+            valid_mask = (rcnn_cls_labels >= 0)
+            valid_rcnn_cls_preds = rcnn_cls.view(-1)[valid_mask]
+            valid_rcnn_cls_labels = rcnn_cls_labels[valid_mask].float()
+
+            if valid_rcnn_cls_labels.numel() > 0:
+                rcnn_loss_cls = F.binary_cross_entropy_with_logits(
+                    valid_rcnn_cls_preds,
+                    valid_rcnn_cls_labels,
+                    reduction='mean',
+                )
+            else:
+                rcnn_loss_cls = torch.tensor(0.0, device=rcnn_cls.device)
         elif loss_cfgs.CLS_LOSS == 'CrossEntropy':
             batch_loss_cls = F.cross_entropy(rcnn_cls, rcnn_cls_labels, reduction='none', ignore_index=-1)
             cls_valid_mask = (rcnn_cls_labels >= 0).float()
