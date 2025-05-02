@@ -156,11 +156,18 @@ class PointHeadTemplate(nn.Module):
 
     def get_part_layer_loss(self, tb_dict=None):
         pos_mask = self.forward_ret_dict['point_cls_labels'] > 0
-        pos_normalizer = max(1, (pos_mask > 0).sum().item())
         point_part_labels = self.forward_ret_dict['point_part_labels']
         point_part_preds = self.forward_ret_dict['point_part_preds']
-        point_loss_part = F.binary_cross_entropy(torch.sigmoid(point_part_preds), point_part_labels, reduction='none')
-        point_loss_part = (point_loss_part.sum(dim=-1) * pos_mask.float()).sum() / (3 * pos_normalizer)
+        valid_row_mask = (point_part_labels >= 0).all(dim=-1)
+        valid_mask = pos_mask & valid_row_mask
+        valid_point_part_labels = point_part_labels[valid_mask]
+        valid_point_part_preds = point_part_preds[valid_mask]
+        if valid_point_part_labels.numel() > 0:
+            point_loss_part = F.binary_cross_entropy_with_logits(
+                valid_point_part_preds, valid_point_part_labels, reduction='mean'
+            )
+        else:
+            point_loss_part = torch.tensor(0.0, device=point_part_labels.device)
 
         loss_weights_dict = self.model_cfg.LOSS_CONFIG.LOSS_WEIGHTS
         point_loss_part = point_loss_part * loss_weights_dict['point_part_weight']
