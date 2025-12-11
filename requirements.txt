@@ -14,3 +14,4 @@ pyquaternion
 kornia>=0.7
 ninja
 av2
+shapely

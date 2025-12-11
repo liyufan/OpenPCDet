@@ -17,7 +17,7 @@ def get_git_commit_number():
 def make_cuda_ext(name, module, sources):
     cuda_ext = CUDAExtension(
         name='%s.%s' % (module, name),
-        sources=[os.path.join(*module.split('.'), src) for src in sources]
+        sources=[os.path.join(*module.split('.'), src) for src in sources],
     )
     return cuda_ext
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
                     'src/iou3d_nms_api.cpp',
                     'src/iou3d_nms.cpp',
                     'src/iou3d_nms_kernel.cu',
-                ]
+                ],
             ),
             make_cuda_ext(
                 name='roiaware_pool3d_cuda',
@@ -53,7 +53,7 @@ if __name__ == '__main__':
                 sources=[
                     'src/roiaware_pool3d.cpp',
                     'src/roiaware_pool3d_kernel.cu',
-                ]
+                ],
             ),
             make_cuda_ext(
                 name='roipoint_pool3d_cuda',
@@ -61,7 +61,7 @@ if __name__ == '__main__':
                 sources=[
                     'src/roipoint_pool3d.cpp',
                     'src/roipoint_pool3d_kernel.cu',
-                ]
+                ],
             ),
             make_cuda_ext(
                 name='pointnet2_stack_cuda',
@@ -73,13 +73,13 @@ if __name__ == '__main__':
                     'src/group_points.cpp',
                     'src/group_points_gpu.cu',
                     'src/sampling.cpp',
-                    'src/sampling_gpu.cu', 
-                    'src/interpolate.cpp', 
+                    'src/sampling_gpu.cu',
+                    'src/interpolate.cpp',
                     'src/interpolate_gpu.cu',
-                    'src/voxel_query.cpp', 
+                    'src/voxel_query.cpp',
                     'src/voxel_query_gpu.cu',
                     'src/vector_pool.cpp',
-                    'src/vector_pool_gpu.cu'
+                    'src/vector_pool_gpu.cu',
                 ],
             ),
             make_cuda_ext(
@@ -95,7 +95,6 @@ if __name__ == '__main__':
                     'src/interpolate_gpu.cu',
                     'src/sampling.cpp',
                     'src/sampling_gpu.cu',
-
                 ],
             ),
             make_cuda_ext(
@@ -112,7 +111,7 @@ if __name__ == '__main__':
                 sources=[
                     'src/ingroup_inds.cpp',
                     'src/ingroup_inds_kernel.cu',
-                ]
+                ],
             ),
         ],
     )
